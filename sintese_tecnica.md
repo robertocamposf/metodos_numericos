@@ -1,1 +1,26 @@
-Título: Aplicação do Método de Newton-Raphson para Modelagem de Fronteiras de Pareto em Otimização Many-Objective.Artigo Base: An Improved Pareto Front Modeling Algorithm for Large-scale Many-Objective Optimization (Panichella, 2022).1. Contextualização do ProblemaO artigo aborda o desafio da otimização com múltiplos objetivos conflitantes. Para que os algoritmos evolutivos (MOEAs) tomem boas decisões sobre quais soluções manter a cada geração, eles precisam equilibrar convergência e diversidade. Estudos recentes provaram que a eficácia dessas métricas depende de conhecer a forma geométrica exata (a curvatura $p$) da Fronteira de Pareto. O desafio é: como calcular essa curvatura em tempo real, a cada geração do algoritmo, sem destruir a performance computacional?2. A Falha das Abordagens AnterioresO autor aponta duas tentativas anteriores problemáticas:O uso de métodos clássicos de regressão não-linear (como Levenberg-Marquardt), que são precisos, mas possuem complexidade assintótica impraticável para o uso contínuo em populações grandes de soluções.O uso de uma fórmula heurística direta (presente no AGE-MOEA original), que tenta inferir a curva usando a distância de um único ponto em relação à origem. A limitação crítica dessa heurística é a instabilidade algorítmica: se o ponto escolhido não estiver exatamente no centro da curva, a fórmula gera uma curvatura com erro inaceitável.3. O Método Numérico Aplicado: Newton-RaphsonA grande sacada do autor para contornar essa limitação é modelar a descoberta da curvatura $p$ da família de variedades $L_p$ como uma função contínua e diferenciável, cujo objetivo é encontrar a sua raiz: $f(p) = 0$.Para isso, o artigo implementa o método numérico iterativo de Newton-Raphson. Partindo de um "chute" inicial $p_0 = 1$ (que representa uma fronteira perfeitamente plana), o algoritmo calcula a próxima iteração através da clássica fórmula:$$p_{n+1} = p_n - \frac{f(p_n)}{f'(p_n)}$$4. Resultados e Contorno da LimitaçãoA aplicação do método de Newton-Raphson resolveu ambos os gargalos simultaneamente:Contorno do Custo Computacional: A convergência do Newton-Raphson é extremamente rápida. O artigo demonstra que são necessárias apenas cerca de 3 iterações para atingir o critério de parada (erro inferior a 0.001).Contorno da Instabilidade: O método encontra a raiz real da função de forma consistente. Para uma frente perfeitamente circular (onde a curvatura real é $p = 2$), o Newton-Raphson converge para 1.9999 independentemente de qual ponto da curva seja injetado no cálculo, provando sua robustez frente à heurística antiga.
+# Síntese Técnica: Projeto 1º GQ - Métodos Numéricos
+
+**Título:** Aplicação do Método de Newton-Raphson para Modelagem de Fronteiras de Pareto em Otimização Many-Objective.
+**Artigo Base:** *An Improved Pareto Front Modeling Algorithm for Large-scale Many-Objective Optimization* (Panichella, 2022).
+
+---
+
+## 1. Contextualização do Problema
+O artigo aborda o desafio da otimização com múltiplos objetivos conflitantes. Para que os algoritmos evolutivos (MOEAs) tomem boas decisões sobre quais soluções manter a cada geração, eles precisam equilibrar convergência e diversidade. Estudos recentes provaram que a eficácia dessas métricas depende de conhecer a forma geométrica exata (a curvatura $p$) da Fronteira de Pareto. O desafio é: como calcular essa curvatura em tempo real, a cada geração do algoritmo, sem destruir a performance computacional?
+
+## 2. A Falha das Abordagens Anteriores
+O autor aponta duas tentativas anteriores problemáticas:
+* O uso de métodos clássicos de regressão não-linear (como Levenberg-Marquardt), que são precisos, mas possuem complexidade assintótica impraticável para o uso contínuo em populações grandes de soluções.
+* O uso de uma fórmula heurística direta (presente no AGE-MOEA original), que tenta inferir a curva usando a distância de um único ponto em relação à origem. A limitação crítica dessa heurística é a instabilidade algorítmica: se o ponto escolhido não estiver exatamente no centro da curva, a fórmula gera uma curvatura com erro inaceitável.
+
+## 3. O Método Numérico Aplicado: Newton-Raphson
+A grande sacada do autor para contornar essa limitação é modelar a descoberta da curvatura $p$ da família de variedades $L_p$ como uma função contínua e diferenciável, cujo objetivo é encontrar a sua raiz: $f(p) = 0$.
+
+Para isso, o artigo implementa o método numérico iterativo de **Newton-Raphson**. Partindo de um "chute" inicial $p_0 = 1$ (que representa uma fronteira perfeitamente plana), o algoritmo calcula a próxima iteração através da clássica fórmula:
+
+$$p_{n+1} = p_n - \frac{f(p_n)}{f'(p_n)}$$
+
+## 4. Resultados e Contorno da Limitação
+A aplicação do método de Newton-Raphson resolveu ambos os gargalos simultaneamente:
+* **Contorno do Custo Computacional:** A convergência do Newton-Raphson é extremamente rápida. O artigo demonstra que são necessárias apenas cerca de 3 iterações para atingir o critério de parada (erro inferior a 0.001).
+* **Contorno da Instabilidade:** O método encontra a raiz real da função de forma consistente. Para uma frente perfeitamente circular (onde a curvatura real é $p = 2$), o Newton-Raphson converge para 1.9999 independentemente de qual ponto da curva seja injetado no cálculo, provando sua robustez frente à heurística antiga.
